@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Edit Asset {{asset1.symbol}}</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form name="frmAsset" method="post" action="/assets/update/{{asset1.symbol}}" >
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <label for="selType">Type</label>
+                            <select class="form-control select2bs4" name="selType" value="{{asset.type}}" style="width: 100%;">
+                                <option value="C" {{#if (isCrypto asset.type)}}selected{{/if}}>Crypto</option>
+                                <option value="E" {{#if (isEquity asset.type)}}selected{{/if}}>Equity</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtName">Name</label>
+                            <input type="text" class="form-control" name="txtName" placeholder="Name" value="{{asset.name}}">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="/assets" class="btn btn-secondary">Cancel</a>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary float-right">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

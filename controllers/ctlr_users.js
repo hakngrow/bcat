@@ -147,7 +147,7 @@ router.get('/edit/:userId', async (req, res) => {
 
     console.log('USERS EDIT: ' + req.params.userId)
 
-    svcUsers.getUser(req.params.userId).then( user => {
+    svcUsers.getUser(req.params.userId).then(user => {
 
         res.render('alte_users_edit', {
             title: 'Edit User',
@@ -186,7 +186,7 @@ router.get('/delete/:userId', async (req, res) => {
 
     console.log('USERS DELETE: ' + req.params.userId)
 
-    svcUsers.getUser(req.params.userId).then( user => {
+    svcUsers.getUser(req.params.userId).then(user => {
 
         res.render('alte_users_delete', {
             title: 'Delete User',

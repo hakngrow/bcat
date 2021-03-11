@@ -9,13 +9,13 @@ router.use(function timeLog (req, res, next) {
     next()
 })
 
-router.get('/', getAll)
+router.get('/api/all', getAll)
 
-router.get('/:symbol', getAsset)
+router.get('/api/:symbol', getAsset)
 
-router.post('/create', createAsset)
-router.delete('/delete/:symbol', deleteAsset)
-router.patch('/update/:symbol', updateAsset)
+router.post('/api/create', createAsset)
+router.delete('/api/delete/:symbol', deleteAsset)
+router.patch('/api/update/:symbol', updateAsset)
 
 function getAll(req, res, next) {
 
@@ -74,6 +74,115 @@ function updateAsset(req, res, next) {
         .then(asset => res.json(asset))
         .catch(err => res.json({message: err}))
 }
+
+
+router.get('/', async (req, res) => {
+
+    console.log('ASSETS GET: ALL')
+
+    svcAssets.getAssets().then(assets => {
+
+        res.render('alte_assets', {
+            title: 'Assets',
+            payload: res.locals.payload,
+            assets: assets 
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
+
+
+router.get('/new', async (req, res) => {
+
+    console.log('ASSETS NEW')
+
+    res.render('alte_assets_new', {
+        title: 'New Asset'
+    })
+})
+
+router.post('/create', async (req, res) => {
+
+    let symbol = req.body.txtSymbol
+    let type = req.body.selType
+    let name = req.body.txtName
+
+    console.log(`ASSETS CREATE: ${symbol}, ${type}, ${name}`)
+    
+    svcAssets.createAsset(symbol, type, name)
+        .then(res.redirect('/assets'))
+        .catch(err => res.json({message: err}))
+})
+
+
+router.get('/edit/:symbol', async (req, res) => {
+
+    console.log('ASSETS EDIT: ' + req.params.symbol)
+
+    svcAssets.getAsset(req.params.symbol).then(asset => {
+
+        console.log(asset)
+
+        res.render('alte_assets_edit', {
+            title: 'Edit Asset',
+            payload: res.locals.payload,
+            asset1: asset
+        })
+    })
+    .catch(err => {
+
+        console.log(err)
+
+        res.json({message: err})
+    })
+})
+
+router.post('/update/:symbol', async (req, res) => {
+
+    let symbol = req.params.symbol
+    let fieldsToUpdate = {}
+
+    if( typeof req.body.selType !== 'undefined')
+        fieldsToUpdate["type"] = req.body.selType
+
+    if( typeof req.body.txtName !== 'undefined')
+        fieldsToUpdate["name"] = req.body.txtName
+
+    console.log(`ASSETS UPDATE: ${symbol}, ${JSON.stringify(fieldsToUpdate)}`)
+
+    svcAssets.updateAsset(symbol, fieldsToUpdate)
+        .then(res.redirect('/assets'))
+        .catch(err => res.json({message: err}))
+})
+
+router.get('/delete/:symbol', async (req, res) => {
+
+    console.log('ASSETS DELETE: ' + req.params.symbol)
+
+    svcAssets.getAsset(req.params.symbol).then(asset => {
+
+        res.render('alte_assets_delete', {
+            title: 'Delete Asset',
+            payload: res.locals.payload,
+            asset: asset
+        })
+    })
+    .catch(err => {
+
+        console.log(err)
+        
+        res.json({message: err})
+    })
+})
+
+router.post('/remove/:symbol', async (req, res) => {
+
+    console.log('ASSETS REMOVE: ' + req.params.symbol)
+
+    svcAssets.deleteAsset(req.params.symbol)
+        .then(res.redirect('/assets'))
+        .catch(err => res.json({message: err}))
+})
 
 
 

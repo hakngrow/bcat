@@ -83,7 +83,11 @@ var ctlr_users = require(path.join(__dirname, '/controllers/ctlr_users'))
 app.use('/users', verifyUser, ctlr_users)
 
 var ctlr_assets = require(path.join(__dirname, '/controllers/ctlr_assets'))
-app.use('/assets', ctlr_assets)
+app.use('/assets', verifyUser, ctlr_assets)
+
+
+
+
 
 var ctlr_communities = require(path.join(__dirname, '/controllers/ctlr_communities'))
 app.use('/comms', ctlr_communities)

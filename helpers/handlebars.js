@@ -14,6 +14,17 @@ module.exports = {
     isInvestor: type => {return type === 'I'},
     isTrader: type => {return type === 'T'},
 
+    getAssetType: assetType => {
+
+      if(assetType === 'C')
+          return 'Crypto'
+      else if(assetType === 'E')
+          return 'Equity'
+    },
+
+    isCrypto: type => {return type === 'C'},
+    isEquity: type => {return type === 'E'},
+
     bar: function(){
       return "BAR!"
     }
