@@ -3,16 +3,19 @@
         <div class="col-md-6">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Edit User {{user.userId}}</h3>
+                    <h3 class="card-title">{{title}}</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form name="frmUser" method="post" action="/users/update/{{user.userId}}" >
+                <form name="frmUser" method="post" action="/users/create" >
                     <div class="card-body">
-
+                        <div class="form-group">
+                            <label for="txtUserId">User Id</label>
+                            <input type="text" class="form-control" name="txtUserId" placeholder="User Id">
+                        </div>
                         <div class="form-group">
                             <label for="selType">Type</label>
-                            <select class="form-control select2bs4" name="selType" value="{{user.type}}" style="width: 100%;">
+                            <select class="form-control select2bs4" name="selType"style="width: 100%;">
                                 <option value="A" {{#if (isAdmin user.type)}}selected{{/if}}>Admin</option>
                                 <option value="I" {{#if (isInvestor user.type)}}selected{{/if}}>Investor</option>
                                 <option value="T" {{#if (isTrader user.type)}}selected{{/if}}>Trader</option>
@@ -20,15 +23,15 @@
                         </div>
                         <div class="form-group">
                             <label for="txtName">Name</label>
-                            <input type="text" class="form-control" name="txtName" placeholder="Name" value="{{user.name}}">
+                            <input type="text" class="form-control" name="txtName" placeholder="Name">
                         </div>
                         <div class="form-group">
                             <label for="txtPassword">Password</label>
-                            <input type="password" class="form-control" name="txtPassword" placeholder="Password" value="{{user.password}}">
+                            <input type="password" class="form-control" name="txtPassword" placeholder="Password">
                         </div>
                         <div class="form-group">
                             <label for="txtPassword">Wallet</label>
-                            <input type="text" class="form-control" name="txtWallet" placeholder="Wallet Address" value="{{user.wallet}}">
+                            <input type="text" class="form-control" name="txtWallet" placeholder="Wallet Address">
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -39,7 +42,7 @@
                                 <a href="/users" class="btn btn-secondary">Cancel</a>
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary float-right">Update</button>
+                                <button type="submit" class="btn btn-primary float-right">Create</button>
                             </div>
                         </div>
                     </div>

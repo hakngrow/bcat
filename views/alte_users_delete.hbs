@@ -1,13 +1,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <div class="card card-primary">
+            <div class="card card-danger">
                 <div class="card-header">
-                    <h3 class="card-title">Edit User {{user.userId}}</h3>
+                    <h3 class="card-title">Delete User {{user.userId}}</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form name="frmUser" method="post" action="/users/update/{{user.userId}}" >
+                <form name="frmUser" method="post" action="/users/remove/{{user.userId}}" >
                     <div class="card-body">
 
                         <div class="form-group">
@@ -39,7 +39,7 @@
                                 <a href="/users" class="btn btn-secondary">Cancel</a>
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary float-right">Update</button>
+                                <button type="submit" class="btn btn-danger float-right">Delete</button>
                             </div>
                         </div>
                     </div>

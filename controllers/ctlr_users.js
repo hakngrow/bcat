@@ -119,21 +119,91 @@ router.get('/', async (req, res) => {
     .catch(err => res.json({message: err}))
 })
 
+router.get('/new', async (req, res) => {
+
+    console.log('USERS NEW')
+
+    res.render('alte_users_new', {
+        title: 'New User'
+    })
+})
+
+router.post('/create', async (req, res) => {
+
+    let userId = req.body.txtUserId
+    let password = req.body.txtPassword
+    let type = req.body.selType
+    let name = req.body.txtName
+    let wallet = req.body.txtWallet
+
+    console.log(`USERS CREATE: ${userId}, ${password}, ${type}, ${name}, ${wallet}`)
+    
+    svcUsers.createUser(userId, password, type, name, wallet)
+        .then(res.redirect('/users'))
+        .catch(err => res.json({message: err}))
+})
+
 router.get('/edit/:userId', async (req, res) => {
 
     console.log('USERS EDIT: ' + req.params.userId)
 
     svcUsers.getUser(req.params.userId).then( user => {
 
-        console.log(user)
-
         res.render('alte_users_edit', {
-            title: 'Edit User: ' + req.params.userId,
+            title: 'Edit User',
             payload: res.locals.payload,
             user: user
         })
     })
     .catch(err => res.json({message: err}))
+})
+
+router.post('/update/:userId', async (req, res) => {
+
+    let userId = req.params.userId
+    let fieldsToUpdate = {}
+    
+    if( typeof req.body.txtPassword !== 'undefined')
+        fieldsToUpdate["password"] = req.body.txtPassword
+
+    if( typeof req.body.selType !== 'undefined')
+        fieldsToUpdate["type"] = req.body.selType
+
+    if( typeof req.body.txtName !== 'undefined')
+        fieldsToUpdate["name"] = req.body.txtName
+
+    if( typeof req.body.txtWallet !== 'undefined')
+        fieldsToUpdate["wallet"] = req.body.txtWallet
+
+    console.log(`USERS UPDATE: ${userId}, ${JSON.stringify(fieldsToUpdate)}`)
+
+    svcUsers.updateUser(userId, fieldsToUpdate)
+        .then(res.redirect('/users'))
+        .catch(err => res.json({message: err}))
+})
+
+router.get('/delete/:userId', async (req, res) => {
+
+    console.log('USERS DELETE: ' + req.params.userId)
+
+    svcUsers.getUser(req.params.userId).then( user => {
+
+        res.render('alte_users_delete', {
+            title: 'Delete User',
+            payload: res.locals.payload,
+            user: user
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
+
+router.post('/remove/:userId', async (req, res) => {
+
+    console.log('USERS REMOVE: ' + req.params.userId)
+
+    svcUsers.deleteUser(req.params.userId)
+        .then(res.redirect('/users'))
+        .catch(err => res.json({message: err}))
 })
 
 module.exports = router
