@@ -49,18 +49,23 @@ const db = mongoose.connection
 // Handlebars template engine configuration
 // -------------------------------------------
 
+const hbs = require('handlebars')
 const exphbs = require('express-handlebars')
+const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access')
 
 app.engine('hbs', 
     exphbs({
+        handlebars: allowInsecurePrototypeAccess(hbs),
         defaultLayout: 'alte_main', 
         extname: '.hbs',
-        helpers: {}
+        helpers: require('./helpers/handlebars')
     })
 )
 
 app.set('view engine', 'hbs')
 app.set('views', './views')
+
+
 
 
 
@@ -75,7 +80,7 @@ var ctlr_authentication = require(path.join(__dirname, '/controllers/ctlr_authen
 app.use('/authenticate', ctlr_authentication)
 
 var ctlr_users = require(path.join(__dirname, '/controllers/ctlr_users'))
-app.use('/users', ctlr_users)
+app.use('/users', verifyUser, ctlr_users)
 
 var ctlr_assets = require(path.join(__dirname, '/controllers/ctlr_assets'))
 app.use('/assets', ctlr_assets)
@@ -89,7 +94,7 @@ app.use('/txns', ctlr_txns)
 
 
 app.get('/home', verifyUser, (req, res) => {
-  res.render('blank')
+  res.render('alte_blank', {title: "Dashboard v0.1"})
 })
 
 

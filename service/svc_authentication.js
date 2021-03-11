@@ -14,16 +14,12 @@ function verifyUser(req, res, next) {
         return res.status(403).send()
     }
 
-    let payload
-
     try {
         
-        payload = jwt.verify(accessToken, CFG_ACCESS_TOKEN_SECRET)
+        res.locals.payload = jwt.verify(accessToken, CFG_ACCESS_TOKEN_SECRET)
         next()
     }
     catch(err) {
-
-        console.log(err)
 
         return res.status(401).send()
     }

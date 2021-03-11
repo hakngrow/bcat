@@ -9,22 +9,19 @@ router.use(function timeLog (req, res, next) {
    next()
 })
 
-router.get('/', getAll)
-router.get('/investors', getInvestors)
-router.get('/traders', getTraders)
+router.get('/api/all', getAll)
+router.get('/api/investors', getInvestors)
+router.get('/api/traders', getTraders)
 
-router.get('/:userId', getUser)
+router.get('/api/:userId', getUser)
 
-router.post('/create', createUser)
-router.delete('/delete/:userId', deleteUser)
-router.patch('/update/:userId', updateUser)
-
-
-
+router.post('/api/create', createUser)
+router.delete('/api/delete/:userId', deleteUser)
+router.patch('/api/update/:userId', updateUser)
 
 function getAll(req, res, next) {
 
-    console.log('USERS GET: ALL')
+    console.log('USERS API GET: ALL')
 
     svcUsers.getUsers()
         .then(users => res.json(users))
@@ -33,7 +30,7 @@ function getAll(req, res, next) {
 
 function getInvestors(req, res, next) {
 
-    console.log('USERS GET: investors')
+    console.log('USERS API GET: investors')
 
     svcUsers.getUsers('I')
         .then(users => res.json(users))
@@ -42,7 +39,7 @@ function getInvestors(req, res, next) {
 
 function getTraders(req, res, next) {
 
-    console.log('USERS GET: traders')
+    console.log('USERS API GET: traders')
 
     svcUsers.getUsers('T')
         .then(users => res.json(users))
@@ -52,7 +49,7 @@ function getTraders(req, res, next) {
 
 function getUser(req, res, next) {
 
-    console.log('USERS GET: ' + req.params.userId)
+    console.log('USERS API GET: ' + req.params.userId)
 
     svcUsers.getUser(req.params.userId)
         .then(user => res.json(user))
@@ -67,7 +64,7 @@ function createUser(req, res, next) {
     let name = req.body.name
     let wallet = req.body.wallet
 
-    console.log(`USERS CREATE: ${userId}, ${password}, ${type}, ${name}, ${wallet}`)
+    console.log(`USERS API CREATE: ${userId}, ${password}, ${type}, ${name}, ${wallet}`)
 
     svcUsers.createUser(userId, password, type, name, wallet)
         .then(user => res.json(user))
@@ -76,7 +73,7 @@ function createUser(req, res, next) {
 
 function deleteUser(req, res, next) {
 
-    console.log('USERS DELETE: ' + req.params.userId)
+    console.log('USERS API DELETE: ' + req.params.userId)
 
     svcUsers.deleteUser(req.params.userId)
         .then(user => res.json(user))
@@ -100,11 +97,43 @@ function updateUser(req, res, next) {
     if( typeof req.body.wallet !== 'undefined')
         fieldsToUpdate["wallet"] = req.body.wallet
 
-    console.log(`USERS UPDATE: ${userId}, ${JSON.stringify(fieldsToUpdate)}`)
+    console.log(`USERS API UPDATE: ${userId}, ${JSON.stringify(fieldsToUpdate)}`)
 
     svcUsers.updateUser(userId, fieldsToUpdate)
         .then(user => res.json(user))
         .catch(err => res.json({message: err}))
 }
+
+router.get('/', async (req, res) => {
+
+    console.log('USERS GET: ALL')
+
+    svcUsers.getUsers().then( users => {
+
+        res.render('alte_users', {
+            title: 'Users',
+            payload: res.locals.payload,
+            users: users 
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
+
+router.get('/edit/:userId', async (req, res) => {
+
+    console.log('USERS EDIT: ' + req.params.userId)
+
+    svcUsers.getUser(req.params.userId).then( user => {
+
+        console.log(user)
+
+        res.render('alte_users_edit', {
+            title: 'Edit User: ' + req.params.userId,
+            payload: res.locals.payload,
+            user: user
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
 
 module.exports = router
