@@ -1,0 +1,53 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">{{title}}</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form name="frmCommunity" method="post" action="/comms/create" >
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="txtName">Name</label>
+                            <input type="text" class="form-control" name="txtName" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="selType">Type</label>
+                            <select class="form-control select2bs4" name="selType"style="width: 100%;">
+                                <option value="A" {{#if (isArbitrage community.type)}}selected{{/if}}>Arbitrage</option>
+                                <option value="D" {{#if (isDiscretionary community.type)}}selected{{/if}}>Discretionary</option>
+                                <option value="H" {{#if (isHighFrequency community.type)}}selected{{/if}}>High Frequency</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtStrategy">Strategy</label>
+                            <input type="text" class="form-control" name="txtStrategy" placeholder="Strategy">
+                        </div>
+                        <div class="form-group">
+                            <label for="selType">Asset</label>
+                            <select class="form-control select2bs4" name="selAsset"style="width: 100%;">
+                                {{#each (getAssets)}}
+                                    <option value="{{symbol}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="/communities" class="btn btn-secondary">Cancel</a>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary float-right">Create</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

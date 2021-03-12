@@ -9,7 +9,7 @@ async function getAssets(_assetType) {
 }
 
 async function getAsset(_symbol) {
-    return await Asset.find({symbol: _symbol})
+    return await Asset.findOne({symbol: _symbol})
 }
 
 async function createAsset(_symbol,  _type, _name) {

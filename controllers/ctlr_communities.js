@@ -9,16 +9,17 @@ router.use(function timeLog (req, res, next) {
     next()
 })
 
-router.get('/', getAll)
-router.get('/:communityId', getCommunity)
+router.get('/api/all', getAll)
+router.get('/api/:communityId', getCommunity)
 
-router.post('/create', createCommunity)
-router.delete('/delete/:communityId', deleteCommunity)
-router.patch('/update/:communityId', updateCommunity)
+router.post('/api/create', createCommunity)
+router.delete('/api/delete/:communityId', deleteCommunity)
+router.patch('/api/update/:communityId', updateCommunity)
+
 
 function getAll(req, res, next) {
 
-    console.log('COMMUNITIES GET: ALL')
+    console.log('COMMUNITIES API GET: ALL')
 
     svcCommunities.getCommunities()
         .then(communities => res.json(communities))
@@ -27,7 +28,7 @@ function getAll(req, res, next) {
 
 function getCommunity(req, res, next) {
 
-    console.log(`COMMUNITIES GET: ${req.params.communityId}`)
+    console.log(`COMMUNITIES API GET: ${req.params.communityId}`)
 
     svcCommunities.getCommunity(req.params.communityId)
         .then(community => res.json(community))
@@ -42,7 +43,7 @@ function createCommunity(req, res, next) {
     let assetSymbol = req.body.assetSymbol
     let traderId = req.body.traderId
 
-    console.log(`COMMUNITIES CREATE: ${type}, ${name}, ${strategy}, ${assetSymbol}, ${traderId}`)
+    console.log(`COMMUNITIES API CREATE: ${type}, ${name}, ${strategy}, ${assetSymbol}, ${traderId}`)
 
     svcCommunities.createCommunity(type, name, strategy, assetSymbol, traderId)
         .then(community => res.json(community))
@@ -51,7 +52,7 @@ function createCommunity(req, res, next) {
 
 function deleteCommunity(req, res, next) {
 
-    console.log('COMMUNITIES DELETE: ' + req.params.communityId)
+    console.log('COMMUNITIES API DELETE: ' + req.params.communityId)
 
     svcCommunities.deleteCommunity(req.params.communityId)
         .then(community => res.json(community))
@@ -78,12 +79,51 @@ function updateCommunity(req, res, next) {
     if( typeof req.body.traderId !== 'undefined')
         fieldsToUpdate["traderId"] = req.body.traderId
 
-    console.log(`COMMUNITIES UPDATE: ${communityId}, ${JSON.stringify(fieldsToUpdate)}`)
+    console.log(`COMMUNITIES API UPDATE: ${communityId}, ${JSON.stringify(fieldsToUpdate)}`)
 
     svcCommunities.updateCommunity(communityId, fieldsToUpdate)
         .then(community => res.json(community))
         .catch(err => res.json({message: err}))
 }
 
+
+
+router.get('/', async (req, res) => {
+
+    console.log('COMMUNITIES GET: ALL')
+
+    svcCommunities.getCommunities().then(comms => {
+
+        res.render('alte_communities', {
+            title: 'Communities',
+            payload: res.locals.payload,
+            comms: comms 
+
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
+
+router.get('/new', async (req, res) => {
+
+    console.log('COMMUNITIES NEW')
+
+    res.render('alte_communities_new', {
+        title: 'New Community'
+    })
+})
+
+router.post('/create', async (req, res) => {
+
+    let name = req.body.txtName
+    let type = req.body.selType
+    let strategy = req.body.txtStrategy
+    let assetSymbol = req.body.selAsset
+    let traderId = req.body.selTrader
+
+    console.log(`COMMUNITIES CREATE: ${name}, ${type}, ${strategy}, ${assetSymbol}, ${traderId}`)
+
+    next()
+})
 
 module.exports = router

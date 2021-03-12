@@ -19,7 +19,7 @@ router.patch('/api/update/:symbol', updateAsset)
 
 function getAll(req, res, next) {
 
-    console.log('ASSETS GET: ALL')
+    console.log('ASSETS API GET: ALL')
 
     svcAssets.getAssets()
         .then(assets => res.json(assets))
@@ -28,7 +28,7 @@ function getAll(req, res, next) {
 
 function getAsset(req, res, next) {
 
-    console.log('ASSETS GET: ' + req.params.symbol)
+    console.log('ASSETS API GET: ' + req.params.symbol)
 
     svcAssets.getAsset(req.params.symbol)
         .then(asset => res.json(asset))
@@ -41,7 +41,7 @@ function createAsset(req, res, next) {
     let type = req.body.type
     let name = req.body.name
 
-    console.log(`ASSETS CREATE: ${symbol}, ${type}, ${name}`)
+    console.log(`ASSETS API CREATE: ${symbol}, ${type}, ${name}`)
 
     svcAssets.createAsset(symbol, type, name)
         .then(asset => res.json(asset))
@@ -50,7 +50,7 @@ function createAsset(req, res, next) {
 
 function deleteAsset(req, res, next) {
 
-    console.log('ASSETS DELETE: ' + req.params.symbol)
+    console.log('ASSETS API DELETE: ' + req.params.symbol)
 
     svcAssets.deleteAsset(req.params.symbol)
         .then(asset => res.json(asset))
@@ -68,7 +68,7 @@ function updateAsset(req, res, next) {
     if( typeof req.body.name !== 'undefined')
         fieldsToUpdate["name"] = req.body.name
 
-    console.log(`ASSETS UPDATE: ${symbol}, ${JSON.stringify(fieldsToUpdate)}`)
+    console.log(`ASSETS API UPDATE: ${symbol}, ${JSON.stringify(fieldsToUpdate)}`)
 
     svcAssets.updateAsset(symbol, fieldsToUpdate)
         .then(asset => res.json(asset))
@@ -126,15 +126,10 @@ router.get('/edit/:symbol', async (req, res) => {
         res.render('alte_assets_edit', {
             title: 'Edit Asset',
             payload: res.locals.payload,
-            asset1: asset
+            asset: asset
         })
     })
-    .catch(err => {
-
-        console.log(err)
-
-        res.json({message: err})
-    })
+    .catch(err => {res.json({message: err})})
 })
 
 router.post('/update/:symbol', async (req, res) => {
