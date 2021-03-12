@@ -2,6 +2,8 @@ var express = require('express')
 
 var router = express.Router()
 
+var svcAssets = require('../service/svc_assets')
+var svcUsers = require('../service/svc_users')
 var svcCommunities = require('../service/svc_communities')
 
 router.use(function timeLog (req, res, next) {
@@ -108,22 +110,130 @@ router.get('/new', async (req, res) => {
 
     console.log('COMMUNITIES NEW')
 
-    res.render('alte_communities_new', {
+    let render_data = {
         title: 'New Community'
+    }
+
+    svcAssets.getAssets().then(assets => {
+            
+        render_data['assets'] = assets
+
+        svcUsers.getUsers('T').then(users => {
+        
+                render_data['traders'] = users
+
+                res.render('alte_communities_new', render_data)
+        })
     })
 })
 
 router.post('/create', async (req, res) => {
 
-    let name = req.body.txtName
     let type = req.body.selType
+    let name = req.body.txtName
     let strategy = req.body.txtStrategy
     let assetSymbol = req.body.selAsset
     let traderId = req.body.selTrader
 
-    console.log(`COMMUNITIES CREATE: ${name}, ${type}, ${strategy}, ${assetSymbol}, ${traderId}`)
+    console.log(`COMMUNITIES CREATE: ${type}, ${name}, ${strategy}, ${assetSymbol}, ${traderId}`)
 
-    next()
+    svcCommunities.createCommunity(type, name, strategy, assetSymbol, traderId)
+        .then(res.redirect('/comms'))
+        .catch(err => res.json({message: err}))
+})
+
+
+router.get('/edit/:id', async (req, res) => {
+
+    console.log('COMMUNITIES EDIT: ' + req.params.id)
+
+    let render_data = {
+        title: 'Edit Community',
+        payload: res.locals.payload
+    }
+
+    svcCommunities.getCommunity(req.params.id).then(community => {
+
+        render_data['community'] = community
+
+        svcAssets.getAssets().then(assets =>{
+
+            render_data['assets'] = assets
+
+            svcUsers.getUsers('T').then(traders => {
+                
+                render_data['traders'] = traders
+
+                res.render('alte_communities_edit', render_data)
+            })
+        })
+    })
+    .catch(err => {res.json({message: err})})
+})
+
+
+router.post('/update/:id', async (req, res) => {
+
+    let communityId = req.params.id
+    let fieldsToUpdate = {}
+
+    if( typeof req.body.txtName !== 'undefined')
+        fieldsToUpdate["name"] = req.body.txtName
+
+    if( typeof req.body.selType !== 'undefined')
+        fieldsToUpdate["type"] = req.body.selType
+
+    if( typeof req.body.txtStrategy !== 'undefined')
+        fieldsToUpdate["strategy"] = req.body.txtStrategy
+
+    if( typeof req.body.selAsset !== 'undefined')
+        fieldsToUpdate["assetSymbol"] = req.body.selAsset
+
+    if( typeof req.body.selTrader !== 'undefined')
+        fieldsToUpdate["traderId"] = req.body.selTrader
+
+    console.log(`COMMUNITIES UPDATE: ${communityId}, ${JSON.stringify(fieldsToUpdate)}`)
+
+    svcCommunities.updateCommunity(communityId, fieldsToUpdate)
+        .then(res.redirect('/comms'))
+        .catch(err => res.json({message: err}))
+})
+
+router.get('/delete/:id', async (req, res) => {
+
+    console.log('COMMUNITIES DELETE: ' + req.params.id)
+
+    let render_data = {
+        title: 'Delete Community',
+        payload: res.locals.payload
+    }
+
+    svcCommunities.getCommunity(req.params.id).then(community => {
+
+        render_data['community'] = community
+
+        svcAssets.getAssets().then(assets =>{
+
+            render_data['assets'] = assets
+
+            svcUsers.getUsers('T').then(traders => {
+                
+                render_data['traders'] = traders
+
+                res.render('alte_communities_delete', render_data)
+            })
+        })
+    })
+    .catch(err => res.json({message: err}))
+})
+
+router.post('/remove/:id', async (req, res) => {
+
+    console.log('COMMUNITIES REMOVE: ' + req.params.id)
+
+    svcCommunities.deleteCommunity(req.params.id)
+        .then(res.redirect('/comms'))
+        .catch(err => res.json({message: err}))
 })
 
 module.exports = router

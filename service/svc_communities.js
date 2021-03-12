@@ -9,6 +9,10 @@ async function getCommunities(_communityType) {
 }
 
 
+async function getCommunityByName(_name) {
+    return await Community.findOne(_name)
+}
+
 async function getCommunity(_communityId) {
     return await Community.findById(_communityId)
 }

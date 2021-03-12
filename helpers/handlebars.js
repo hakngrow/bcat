@@ -11,6 +11,10 @@ module.exports = {
     return parseInt(value) + 1
   },
 
+  isEqual: (val1, val2) => {
+    return val1 === val2
+  },
+
   isAdmin: userType => {
     return userType === 'A'
   },
@@ -47,19 +51,6 @@ module.exports = {
   },
   isHighFrequency: commType => {
     return commType === 'H'
-  },
-
-  getAssets: _ => {
-
-    let assets = {}
-
-    
-
-    svcAssets.getAssets().forEach(asset => { 
-      assets[asset.symbol] = asset.name
-    })
-
-    return assets
   },
 
   bar: function () {

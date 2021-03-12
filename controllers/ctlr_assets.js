@@ -114,14 +114,11 @@ router.post('/create', async (req, res) => {
         .catch(err => res.json({message: err}))
 })
 
-
 router.get('/edit/:symbol', async (req, res) => {
 
     console.log('ASSETS EDIT: ' + req.params.symbol)
 
     svcAssets.getAsset(req.params.symbol).then(asset => {
-
-        console.log(asset)
 
         res.render('alte_assets_edit', {
             title: 'Edit Asset',

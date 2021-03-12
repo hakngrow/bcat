@@ -3,19 +3,20 @@
         <div class="col-md-6">
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">{{title}}</h3>
+                    <h3 class="card-title">Edit Community : {{community.name}}</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form name="frmCommunity" method="post" action="/comms/create" >
+                <form name="frmCommunity" method="post" action="/comms/update/{{community._id}}" >
                     <div class="card-body">
+
                         <div class="form-group">
                             <label for="txtName">Name</label>
-                            <input type="text" class="form-control" name="txtName" placeholder="Name">
+                            <input type="text" class="form-control" name="txtName" placeholder="Name" value="{{community.name}}">
                         </div>
                         <div class="form-group">
                             <label for="selType">Type</label>
-                            <select class="form-control select2bs4" name="selType"style="width: 100%;">
+                            <select class="form-control select2bs4" name="selType" value="{{community.type}}" style="width: 100%;">
                                 <option value="A" {{#if (isArbitrage community.type)}}selected{{/if}}>Arbitrage</option>
                                 <option value="D" {{#if (isDiscretionary community.type)}}selected{{/if}}>Discretionary</option>
                                 <option value="H" {{#if (isHighFrequency community.type)}}selected{{/if}}>High Frequency</option>
@@ -23,21 +24,21 @@
                         </div>
                         <div class="form-group">
                             <label for="txtStrategy">Strategy</label>
-                            <input type="text" class="form-control" name="txtStrategy" placeholder="Strategy">
+                            <input type="text" class="form-control" name="txtStrategy" placeholder="Strategy" value="{{community.strategy}}">
                         </div>
                         <div class="form-group">
                             <label for="selAsset">Asset</label>
-                            <select class="form-control select2bs4" name="selAsset" style="width: 100%;">
+                            <select class="form-control select2bs4" name="selAsset" value="{{community.assetSymbol}}" style="width: 100%;">
                                 {{#each assets}}
-                                    <option value="{{symbol}}">{{name}}</option>
+                                    <option value="{{symbol}}" {{#if (isEqual symbol ../community.assetSymbol)}}selected{{/if}}>{{name}}</option>
                                 {{/each}}
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="selTrader">Trader</label>
-                            <select class="form-control select2bs4" name="selTrader" style="width: 100%;">
+                            <select class="form-control select2bs4" name="selTrader" value="{{community.traderId}}" style="width: 100%;">
                                 {{#each traders}}
-                                    <option value="{{userId}}">{{name}}</option>
+                                    <option value="{{userId}}" {{#if (isEqual userId ../community.traderId)}}selected{{/if}}>{{name}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -50,7 +51,7 @@
                                 <a href="/comms" class="btn btn-secondary">Cancel</a>
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary float-right">Create</button>
+                                <button type="submit" class="btn btn-primary float-right">Update</button>
                             </div>
                         </div>
                     </div>
