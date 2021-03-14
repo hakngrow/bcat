@@ -89,7 +89,7 @@ var ctlr_communities = require(path.join(__dirname, '/controllers/ctlr_communiti
 app.use('/comms', verifyUser, ctlr_communities)
 
 var ctlr_memberships = require(path.join(__dirname, '/controllers/ctlr_memberships'))
-app.use('/mbrshps', ctlr_memberships)
+app.use('/mbrshps', verifyUser, ctlr_memberships)
 
 
 

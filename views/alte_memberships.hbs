@@ -34,10 +34,18 @@
                                         <i class="fas fa-info-circle">
                                         </i>
                                     </a>
-                                    <a class="btn btn-success btn-sm" href="/mbrshps/join/{{_id}}">
+                                    {{#unless (isCommunityMember _id ../joinedCommunityIds)}}
+                                    <a class="btn btn-success btn-sm" href="/mbrshps/join/users/{{../payload.userId}}/comms/{{_id}}">
                                         <i class="fas fa-cart-arrow-down">
                                         </i>
                                     </a>
+                                    {{/unless}}
+                                    <!--
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                        data-target="#exampleModal" data-whatever="{{_id}}">
+                                        <i class="fas fa-cart-arrow-down">
+                                        </i>
+                                    </button>-->
                                 </td>
                             </tr>
                             {{/each}}

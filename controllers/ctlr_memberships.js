@@ -117,15 +117,34 @@ router.get('/', async (req, res) => {
 
     console.log('MEMBERSHIPS GET: ALL')
 
-    svcCommunities.getCommunities().then(communities => {
+    let userId = res.locals.payload.userId
 
-        res.render('alte_memberships', {
-            title: 'Communities',
-            payload: res.locals.payload,
-            communities: communities 
+    svcCommunities.getCommunities().then(communities => {
+        svcMemberships.getCommunities(userId).then(memberships => {
+
+            console.log(communities)
+
+            res.render('alte_memberships', {
+                title: 'Communities',
+                payload: res.locals.payload,
+                communities: communities,
+                joinedCommunityIds: memberships.map(membership => membership.communityId)
+            })
         })
     })
     .catch(err => res.json({message: err}))
+})
+
+router.get('/join/users/:userId/comms/:communityId', async (req, res) => {
+
+    let userId = req.params.userId
+    let communityId = req.params.communityId
+
+    console.log(`MEMBERSHIPS JOIN: ${userId}, ${communityId}`)
+
+    svcMemberships.createMembership(userId, communityId)
+        .then(res.redirect('/mbrshps'))
+        .catch(err => res.json({message: err}))
 
 })
 

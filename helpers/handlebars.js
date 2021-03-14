@@ -53,6 +53,10 @@ module.exports = {
     return commType === 'H'
   },
 
+  isCommunityMember: (communityId, joinedCommunityIds) => {
+    return joinedCommunityIds.includes(communityId.toString())
+  },
+
   bar: function () {
     return 'BAR!'
   }
