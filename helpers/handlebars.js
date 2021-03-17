@@ -2,17 +2,21 @@ var svcAssets = require('../service/svc_assets')
 
 module.exports = {
 
-  getUserType: userType => {
-    if (userType === 'I') return 'Investor'
-    else if (userType === 'T') return 'Trader'
-  },
-
   inc: value => {
     return parseInt(value) + 1
   },
 
   isEqual: (val1, val2) => {
     return val1 === val2
+  },
+
+  getYesNo: (booleanVal) => {
+    return (booleanVal ? 'Yes' : 'No' )
+  },
+
+  getUserType: userType => {
+    if (userType === 'I') return 'Investor'
+    else if (userType === 'T') return 'Trader'
   },
 
   isAdmin: userType => {

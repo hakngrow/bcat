@@ -91,6 +91,9 @@ app.use('/comms', verifyUser, ctlr_communities)
 var ctlr_memberships = require(path.join(__dirname, '/controllers/ctlr_memberships'))
 app.use('/mbrshps', verifyUser, ctlr_memberships)
 
+var ctlr_tokens = require(path.join(__dirname, '/controllers/ctlr_tokens'))
+app.use('/tokens', verifyUser, ctlr_tokens)
+
 
 
 var ctlr_txns = require(path.join(__dirname, '/controllers/ctlr_txns'))

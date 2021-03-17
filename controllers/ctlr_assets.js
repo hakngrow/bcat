@@ -9,15 +9,15 @@ router.use(function timeLog (req, res, next) {
     next()
 })
 
-router.get('/api/all', getAll)
+router.get('/api/all', apiGetAll)
 
-router.get('/api/:symbol', getAsset)
+router.get('/api/:symbol', apiGetAsset)
 
-router.post('/api/create', createAsset)
-router.delete('/api/delete/:symbol', deleteAsset)
-router.patch('/api/update/:symbol', updateAsset)
+router.post('/api/create', apiCreateAsset)
+router.delete('/api/delete/:symbol', apiDeleteAsset)
+router.patch('/api/update/:symbol', apiUpdateAsset)
 
-function getAll(req, res, next) {
+function apiGetAll(req, res, next) {
 
     console.log('ASSETS API GET: ALL')
 
@@ -26,7 +26,7 @@ function getAll(req, res, next) {
         .catch(err => res.json({message: err}))
 }
 
-function getAsset(req, res, next) {
+function apiGetAsset(req, res, next) {
 
     console.log('ASSETS API GET: ' + req.params.symbol)
 
@@ -35,7 +35,7 @@ function getAsset(req, res, next) {
         .catch(err => res.json({message: err}))
 }
 
-function createAsset(req, res, next) {
+function apiCreateAsset(req, res, next) {
 
     let symbol = req.body.symbol
     let type = req.body.type
@@ -48,7 +48,7 @@ function createAsset(req, res, next) {
         .catch(err => res.json({message: err}))
 }
 
-function deleteAsset(req, res, next) {
+function apiDeleteAsset(req, res, next) {
 
     console.log('ASSETS API DELETE: ' + req.params.symbol)
 
@@ -57,7 +57,7 @@ function deleteAsset(req, res, next) {
         .catch(err => res.json({message: err}))
 }
 
-function updateAsset(req, res, next) {
+function apiUpdateAsset(req, res, next) {
 
     let symbol = req.params.symbol
     let fieldsToUpdate = {}
