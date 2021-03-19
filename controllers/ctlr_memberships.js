@@ -122,8 +122,6 @@ router.get('/', async (req, res) => {
     svcCommunities.getCommunities().then(communities => {
         svcMemberships.getCommunities(userId).then(memberships => {
 
-            console.log(communities)
-
             res.render('alte_memberships', {
                 title: 'Communities',
                 payload: res.locals.payload,

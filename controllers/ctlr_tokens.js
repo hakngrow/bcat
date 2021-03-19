@@ -3,11 +3,12 @@ var express = require('express')
 var router = express.Router()
 
 var svcTokens = require('../service/svc_tokens')
-
+/*
 router.use(function timeLog (req, res, next) {
     console.log('ctlr_tokens, Now: ', new Date().toString())
     next()
 })
+*/
 
 router.get('/api/cap/:address', apiGetCap)
 router.get('/api/paused/:address', apiIsPaused)
@@ -42,38 +43,159 @@ function apiIsPaused(req, res, next) {
 }
 
 
+router.get('/', getAllTokens)
+router.get('/pauser', pauser)
+router.post('/processPauser', processPauser)
+router.get('/pause/:address', pauseToken, getAllTokens)
+router.get('/unpause/:address', unpauseToken, getAllTokens)
+router.get('/issue', issueToken)
+router.post('/deploy', deployToken, getAllTokens)
 
-router.get('/', async (req, res) => {
+
+async function getAllTokens(req, res, next) {
 
     console.log('TOKENS GET: ALL')
 
     svcTokens.getDeployedTokens().then(tokens => {
 
-        console.log(tokens)
-
         res.render('alte_tokens', {
             title: 'Tokens',
-            tokens: tokens 
+            tokens: tokens,
+            status: res.locals.status
         })
     })
     .catch(err => {
         
         console.log(err)
-
-        res.json({message: err})
     }) 
-})
+}
 
 
-router.get('/edit/:address', async (req, res) => {
+async function pauser(req, res, next) {
 
-    let address = req.params.address
+    console.log('TOKENS PAUSER: ')
 
-    console.log('TOKENS GET: ' + address)
+    svcTokens.getDeployedTokens().then(tokens => {
 
-    
-})
+        res.render('alte_tokens_pauser', {
+            title: 'Token Pauser',
+            tokens: tokens 
+        })
+    })
+    .catch(err => console.log(err))
+}
 
+
+async function processPauser(req, res, next) {
+
+    let action = req.body.selAction
+    let tokenAddress = req.body.selToken
+    let pauserAddress = req.body.txtPauser
+
+    console.log(`TOKENS PROCESS_PAUSER: ${action}, ${tokenAddress}, ${pauserAddress}`)
+
+    if (action === 'A') {
+
+        svcTokens.addTokenPauser(tokenAddress, pauserAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Add Token Pauser',
+                text: `Pauser ${pauserAddress} is added to token contract ${tokenAddress}`
+            })
+        })
+        .catch(err => console.log(err))
+    }
+
+    if (action === 'R') {
+
+        svcTokens.renounceTokenPauser(tokenAddress, pauserAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Renounce Token Pauser',
+                text: `Pauser ${pauserAddress} of token contract ${tokenAddress} renounced`
+            })
+        })
+        .catch(err => console.log(err))
+    }
+
+    if (action === 'C') {
+
+        svcTokens.isTokenPauser(tokenAddress, pauserAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Check Token Pauser',
+                text: pauser.output ? `${pauserAddress} is a pauser` : `${pauserAddress} is a NOT pauser`
+            })
+        })
+        .catch(err => console.log(err))
+    }
+}
+
+
+async function pauseToken(req, res, next) {
+
+    let tokenAddress = req.params.address
+
+    console.log(`TOKENS PAUSE: ${tokenAddress}`)
+
+    svcTokens.pauseToken(tokenAddress).then(pausedToken => {
+
+        console.log(`TOKENS PAUSE: ${pausedToken.status} ${pausedToken.statusText}`)
+
+        res.locals.status = `Pause transaction ${pausedToken.statusText}` 
+    })
+    .catch(err => console.log(err))
+
+    next()
+}
+
+
+async function unpauseToken(req, res, next) {
+
+    let tokenAddress = req.params.address
+
+    console.log(`TOKENS UNPAUSE: ${tokenAddress}`)
+
+    svcTokens.unpauseToken(tokenAddress).then(unpausedToken => {
+
+        console.log(`TOKENS UNPAUSE: ${unpausedToken.status} ${unpausedToken.statusText}`)
+
+        res.locals.status = `Unpause transaction ${unpausedToken.statusText}`
+    })
+    .catch(err => console.log(err))
+
+    next()
+}
+
+async function issueToken(req, res, next) {
+
+    console.log('TOKENS ISSUE: ')
+
+    res.render('alte_tokens_issue', {
+        title: 'Issue Token'
+    })
+}
+
+
+async function deployToken(req, res, next) {
+
+    let name = req.body.txtName
+    let symbol = req.body.txtSymbol
+    let decimals = req.body.txtDecimals
+    let cap = req.body.txtCap
+
+    console.log(`TOKENS DEPLOY: ${name}, ${symbol}, ${decimals}, ${cap}`)
+
+    svcTokens.deployToken(name, symbol, decimals, cap).then(deployedToken => {
+
+        console.log(`TOKENS DEPLOY: ${deployedToken.status} ${deployedToken.statusText}`)
+
+        res.locals.status = `Token issue ${deployedToken.statusText}`
+    })
+    .catch(err => console.log(err.data))
+
+    next()
+}
 
 
 module.exports = router

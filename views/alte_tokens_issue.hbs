@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Issue Token</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form name="frmToken" method="post" action="/tokens/deploy">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="txtName">Name</label>
+                            <input type="text" class="form-control" id="txtName" name="txtName" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSymbol">Symbol</label>
+                            <input type="text" class="form-control" id="txtSymbol" name="txtSymbol" placeholder="Symbol">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtDecimals">Decimals</label>
+                            <input type="text" class="form-control" id="txtDecimals" name="txtDecimals" placeholder="Decimals">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCap">Cap</label>
+                            <input type="text" class="form-control" id="txtCap" name="txtCap" placeholder="Caps">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button href="/home" class="btn btn-secondary">Cancel</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary float-right">Deploy</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

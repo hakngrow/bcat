@@ -9,6 +9,9 @@ module.exports = {
   isEqual: (val1, val2) => {
     return val1 === val2
   },
+  isUndefined: (val) => {
+    return typeof val === 'undefined'
+  },
 
   getYesNo: (booleanVal) => {
     return (booleanVal ? 'Yes' : 'No' )

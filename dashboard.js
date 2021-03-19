@@ -105,7 +105,9 @@ app.get('/home', verifyUser, (req, res) => {
   res.render('alte_blank', {title: "Dashboard v0.1"})
 })
 
-
+app.get('/modal', verifyUser, (req, res) => {
+    res.render('alte_modal', {title: "Dashboard v0.1"})
+  })
 
 
 
