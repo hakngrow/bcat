@@ -1,0 +1,49 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Buy Tokens</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form name="frmBuyTokens" method="post" action="/crowdsales/purchase">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="selCrowdsale">Type</label>
+                            <select class="form-control select2bs4" name="selCrowdsale"style="width: 100%;">
+                                {{#each crowdsales}}
+                                <option value="{{address}}">{{name}}, {{symbol}} [{{address}}]</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="selInvestor">Type</label>
+                            <select class="form-control select2bs4" name="selInvestor"style="width: 100%;">
+                                {{#each investors}}
+                                <option value="{{wallet}}">{{name}}, {{userId}} [{{wallet}}]</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtValue">Value</label>
+                            <input type="text" class="form-control" id="txtValue" name="txtValue" placeholder="Value in Ether">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button href="/home" class="btn btn-secondary">Cancel</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary float-right">Purchase</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

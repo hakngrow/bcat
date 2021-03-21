@@ -46,6 +46,8 @@ function apiIsPaused(req, res, next) {
 router.get('/', getAllTokens)
 router.get('/pauser', pauser)
 router.post('/processPauser', processPauser)
+router.get('/minter', minter)
+router.post('/processMinter', processMinter)
 router.get('/pause/:address', pauseToken, getAllTokens)
 router.get('/unpause/:address', unpauseToken, getAllTokens)
 router.get('/issue', issueToken)
@@ -68,6 +70,66 @@ async function getAllTokens(req, res, next) {
         
         console.log(err)
     }) 
+}
+
+async function minter(req, res, next) {
+
+    console.log('TOKENS MINTER: ')
+
+    svcTokens.getDeployedTokens().then(tokens => {
+
+        res.render('alte_tokens_Minter', {
+            title: 'Token Minter',
+            tokens: tokens 
+        })
+    })
+    .catch(err => console.log(err))
+}
+
+
+async function processMinter(req, res, next) {
+
+    let action = req.body.selAction
+    let tokenAddress = req.body.selToken
+    let minterAddress = req.body.txtMinter
+
+    console.log(`TOKENS PROCESS_MINTER: ${action}, ${tokenAddress}, ${minterAddress}`)
+
+    if (action === 'A') {
+
+        svcTokens.addTokenMinter(tokenAddress, minterAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Add Token Minter',
+                text: `Minter ${minterAddress} is added to token contract ${tokenAddress}`
+            })
+        })
+        .catch(err => console.log(err))
+    }
+
+    if (action === 'R') {
+
+        svcTokens.renounceTokenMinter(tokenAddress, minterAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Renounce Token Minter',
+                text: `Minter ${minterAddress} of token contract ${tokenAddress} renounced`
+            })
+        })
+        .catch(err => console.log(err))
+    }
+
+    if (action === 'C') {
+
+        svcTokens.isTokenMinter(tokenAddress, minterAddress).then(pauser => {
+
+            res.render('alte_modal', {
+                title: 'Check Token Minter',
+                text: pauser.output ? `${minterAddress} is a minter` : `${minterAddress} is a NOT minter`
+            })
+        })
+        .catch(err => console.log(err))
+    }
 }
 
 

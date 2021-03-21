@@ -29,6 +29,7 @@ module.exports = {
     CFG_KLD_NODE0_ID: process.env.KLD_NODE0_ID,
     CFG_KLD_NODE0_URL_REST: process.env.KLD_NODE0_URL_REST,
 
-    CFG_KLD_GWAPI_ID_TOKEN: process.env.KLD_GWAPI_ID_TOKEN
+    CFG_KLD_GWAPI_ID_TOKEN: process.env.KLD_GWAPI_ID_TOKEN,
+    CFG_KLD_GWAPI_ID_CROWDSALE: process.env.KLD_GWAPI_ID_CROWDSALE
 
 }

@@ -94,6 +94,9 @@ app.use('/mbrshps', verifyUser, ctlr_memberships)
 var ctlr_tokens = require(path.join(__dirname, '/controllers/ctlr_tokens'))
 app.use('/tokens', verifyUser, ctlr_tokens)
 
+var ctlr_crowdsales = require(path.join(__dirname, '/controllers/ctlr_crowdsales'))
+app.use('/crowdsales', verifyUser, ctlr_crowdsales)
+
 
 
 var ctlr_txns = require(path.join(__dirname, '/controllers/ctlr_txns'))

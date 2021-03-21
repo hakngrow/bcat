@@ -1,0 +1,57 @@
+<!-- Toastr -->
+<script src="/plugins/toastr/toastr.min.js"></script>
+<script>
+    {{#unless (isUndefined status)}}
+
+    $(function() {
+
+        toastr.info('{{status}}')
+    })
+    {{/unless}}
+</script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Symbol</th>
+                                <th>Name</th>
+                                <th>Total Supply</th>
+                                <th>Rate</th>
+                                <th>Wei Raised</th>
+                                <th>Wallet</th>
+                                <th>Crowdsale Address</th>
+                                <th>Paused</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each crowdsales}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{symbol}}</td>
+                                <td>{{name}}</td>
+                                <td>{{totalSupply}}</td>
+                                
+                                <td>{{rate}}</td>
+                                <td>{{weiRaised}}</td
+                                >
+                                <td>{{wallet}}</td>
+                                <td>{{address}}</td>
+
+                                <td>{{getYesNo paused}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</div>

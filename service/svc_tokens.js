@@ -106,15 +106,6 @@ async function getTokenBalance(address) {
     return result.data.output
 }
 
-async function isTokenPaused(address) {
-
-    let url = URL_GWAPI_TOKEN + '/' + address + '/paused?kld-from=' + CFG_KLD_NODE0_SIGNACC0
-
-    let result = await axios.get(url).catch(err => console.log(err))
-
-    return result.data.output
-}
-
 async function addTokenPauser(tokenAddress, pauserAddress) {
 
     let url = URL_GWAPI_TOKEN + '/' + tokenAddress + '/addPauser?kld-from=' + CFG_KLD_NODE0_SIGNACC0
@@ -142,6 +133,44 @@ async function isTokenPauser(tokenAddress, pauserAddress) {
     })
 
     return result.data
+}
+
+async function addTokenMinter(tokenAddress, minterAddress) {
+
+    let url = URL_GWAPI_TOKEN + '/' + tokenAddress + '/addMinter?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+
+    let payload = {account: minterAddress}
+
+    return await axios.post(url, payload)
+}
+
+async function renounceTokenMinter(tokenAddress, minterAddress) {
+
+    let url = URL_GWAPI_TOKEN + '/' + tokenAddress + '/renounceMinter?kld-from=' + minterAddress
+
+    await axios.post(url, {})
+}
+
+async function isTokenMinter(tokenAddress, minterAddress) {
+
+    let url = URL_GWAPI_TOKEN + '/' + tokenAddress + '/isMinter?kld-from=' + CFG_KLD_NODE0_SIGNACC0 + '&account=' + minterAddress
+
+    let result = await axios.get(url).catch(err => {
+        
+        if (err.response)
+            console.log(err.response.data)
+    })
+
+    return result.data
+}
+
+async function isTokenPaused(address) {
+
+    let url = URL_GWAPI_TOKEN + '/' + address + '/paused?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+
+    let result = await axios.get(url).catch(err => console.log(err))
+
+    return result.data.output
 }
 
 async function pauseToken(address) {
@@ -172,5 +201,7 @@ async function deployToken(_name, _symbol, _decimals, _cap) {
 module.exports = {
     getDeployedTokens, getDeployedToken, 
     getTokenCap, getTokenName, getTokenSymbol, getTokenDecimals, getTokenBalance, isTokenPaused,
-    addTokenPauser, renounceTokenPauser, isTokenPauser, pauseToken, unpauseToken, deployToken
+    addTokenPauser, renounceTokenPauser, isTokenPauser, 
+    addTokenMinter, renounceTokenMinter, isTokenMinter, 
+    pauseToken, unpauseToken, deployToken
 }

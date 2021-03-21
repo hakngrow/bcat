@@ -17,6 +17,10 @@ module.exports = {
     return (booleanVal ? 'Yes' : 'No' )
   },
 
+  getShortAddress: (address) => {
+    return address.substring(0, 8) + '...'
+  },
+
   getUserType: userType => {
     if (userType === 'I') return 'Investor'
     else if (userType === 'T') return 'Trader'
