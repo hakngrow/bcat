@@ -1,0 +1,40 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Base</th>
+                                <th>Target</th>
+                                <th>Market</th>
+                                <th>Last Done</th>
+                                <th>Volume</th>
+                                <th>Bid/Ask %</th>
+                                <th>Last Traded At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each tickers}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{base}}</td>
+                                <td>{{target}}</td>
+                                <td>{{market.name}}</td>
+                                <td>{{formatCurrency last}}</td>
+                                <td>{{formatNumber volume}}</td>
+                                <td>{{bid_ask_spread_percentage}}</td>
+                                <td>{{last_traded_at}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</div>

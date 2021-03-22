@@ -1,4 +1,12 @@
-var svcAssets = require('../service/svc_assets')
+const fmtCurrency = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+
+  //minimumFractionDigits: 0, // (will print 2500.10 as $2,500.1)
+  //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+})
+
+const fmtNumber = new Intl.NumberFormat()
 
 module.exports = {
 
@@ -11,6 +19,13 @@ module.exports = {
   },
   isUndefined: (val) => {
     return typeof val === 'undefined'
+  },
+
+  formatCurrency: (amount) => {
+    return fmtCurrency.format(amount)
+  },
+  formatNumber: (amount) => {
+    return fmtNumber.format(amount)
   },
 
   getYesNo: (booleanVal) => {

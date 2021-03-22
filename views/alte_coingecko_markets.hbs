@@ -1,0 +1,51 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Id</th>
+                                <th>Target</th>
+                                <th>Market</th>
+                                <th>Current Price</th>
+                                <th>Market Cap</th>
+                                <th>Cap Rank</th>
+                                <th>Day High</th>
+                                <th>Day Low</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each markets}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{id}}</td>
+                                <td>{{symbol}}</td>
+                                <td>{{Name}}</td>
+                                <td>{{formatCurrency current_price}}</td>
+                                <td>{{market_cap}}</td>
+                                <td>{{market_cap_rank}}</td>
+                                <td>{{formatCurrency high_24h}}</td>
+                                <td>{{formatCurrency low_24h}}</td>
+
+                                <td class="project-actions text-right">
+                                    <a class="btn btn-info btn-sm" href="/coingecko/tickers/{{id}}">
+                                        <i class="fas fa-share-square"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <div class="col-md-12">
+            <a href="/assets/new" class="btn btn-primary float-right">New Asset</a>
+        </div>
+    </div>
+</div>

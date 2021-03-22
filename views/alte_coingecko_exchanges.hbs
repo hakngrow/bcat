@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>Name</th>
+                                <th>Country</th>
+                                <th>Yr Established</th>
+                                <th>Trust Score</th>
+                                <th>Trust Score Rank</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each exchanges}}
+                            <tr>
+                                <td>{{inc @index}}</td>
+                                <td>{{name}}</td>
+                                <td>{{country}}</td>
+                                <td>{{year_established}}</td>
+                                <td>{{trust_score}}</td>
+                                <td>{{trust_score_rank}}</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+    </div>
+</div>

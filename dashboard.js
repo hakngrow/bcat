@@ -97,6 +97,9 @@ app.use('/tokens', verifyUser, ctlr_tokens)
 var ctlr_crowdsales = require(path.join(__dirname, '/controllers/ctlr_crowdsales'))
 app.use('/crowdsales', verifyUser, ctlr_crowdsales)
 
+var ctlr_coingecko = require(path.join(__dirname, '/controllers/ctlr_coingecko'))
+app.use('/coingecko', verifyUser, ctlr_coingecko)
+
 
 
 var ctlr_txns = require(path.join(__dirname, '/controllers/ctlr_txns'))
