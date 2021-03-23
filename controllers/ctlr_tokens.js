@@ -78,7 +78,7 @@ async function minter(req, res, next) {
 
     svcTokens.getDeployedTokens().then(tokens => {
 
-        res.render('alte_tokens_Minter', {
+        res.render('alte_tokens_minter', {
             title: 'Token Minter',
             tokens: tokens 
         })
