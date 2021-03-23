@@ -11,7 +11,7 @@ const {
 
 const URL_PFAPI_CONTRACTS = 'https://' + CFG_KLD_CONSOLE_URL + '/ledger/' + CFG_KLD_CONSORTIA_ID + '/' + CFG_KLD_ENV_ID + '/contracts'
 
-const URL_GWAPI_TOKEN = 'https://' + CFG_KLD_BASIC_AUTH + '@' + CFG_KLD_NODE0_URL_REST + '/gateways/' + CFG_KLD_GWAPI_ID_CROWDSALE
+const URL_GWAPI_CROWDSALE = 'https://' + CFG_KLD_BASIC_AUTH + '@' + CFG_KLD_NODE0_URL_REST + '/gateways/' + CFG_KLD_GWAPI_ID_CROWDSALE
 
 
 async function getDeployedCrowdsales() {
@@ -46,13 +46,15 @@ async function getCrowdsale(addrCrowdsale) {
     let tokenName = await svcToken.getTokenName(tokenAddress)
     let tokenSymbol = await svcToken.getTokenSymbol(tokenAddress)
     let tokenCap = await svcToken.getTokenCap(tokenAddress)
+    let tokenTotalSupply = await svcToken.getTokenTotalSupply(tokenAddress)
     let tokenPaused = await svcToken.isTokenPaused(tokenAddress)
 
     let crowdsale = {
         address: addrCrowdsale,
         name: tokenName,
         symbol: tokenSymbol,
-        totalSupply: tokenCap,
+        cap: tokenCap,
+        totalSupply: tokenTotalSupply,
         rate: crowdsaleRate,
         weiRaised: crowdsaleWeiRaised,
         wallet: crowdsaleWallet,
@@ -65,7 +67,7 @@ async function getCrowdsale(addrCrowdsale) {
 
 async function getTokenAddress(addrCrowdsale) {
 
-    let url = URL_GWAPI_TOKEN + '/' + addrCrowdsale + '/token?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+    let url = URL_GWAPI_CROWDSALE + '/' + addrCrowdsale + '/token?kld-from=' + CFG_KLD_NODE0_SIGNACC0
 
     let result = await axios.get(url).catch(err => console.log(err))
 
@@ -75,7 +77,7 @@ async function getTokenAddress(addrCrowdsale) {
 
 async function getWalletAddress(addrCrowdsale) {
 
-    let url = URL_GWAPI_TOKEN + '/' + addrCrowdsale + '/wallet?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+    let url = URL_GWAPI_CROWDSALE + '/' + addrCrowdsale + '/wallet?kld-from=' + CFG_KLD_NODE0_SIGNACC0
 
     let result = await axios.get(url).catch(err => console.log(err.response))
 
@@ -85,7 +87,7 @@ async function getWalletAddress(addrCrowdsale) {
 
 async function getRate(addrCrowdsale) {
 
-    let url = URL_GWAPI_TOKEN + '/' + addrCrowdsale + '/rate?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+    let url = URL_GWAPI_CROWDSALE + '/' + addrCrowdsale + '/rate?kld-from=' + CFG_KLD_NODE0_SIGNACC0
 
     let result = await axios.get(url).catch(err => console.log(err))
 
@@ -95,16 +97,34 @@ async function getRate(addrCrowdsale) {
 
 async function getWeiRaised(addrCrowdsale) {
 
-    let url = URL_GWAPI_TOKEN + '/' + addrCrowdsale + '/weiRaised?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+    let url = URL_GWAPI_CROWDSALE + '/' + addrCrowdsale + '/weiRaised?kld-from=' + CFG_KLD_NODE0_SIGNACC0
 
     let result = await axios.get(url).catch(err => console.log(err))
 
     return result.data.output
 }
 
+
+async function deployCrowdsale(addrToken, rate, addrWallet) {
+
+    let url = URL_GWAPI_CROWDSALE + '?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+
+    let payload = {
+
+        "_rate": rate,
+        "_token": addrToken,
+        "_wallet": addrWallet
+    }
+
+    let result = await axios.post(url, payload).catch(err => console.log(err))
+
+    return result
+}
+
+
 async function purchaseTokens(addrCrowdsale, addrBeneficiary, value) {
 
-    let url = URL_GWAPI_TOKEN + '/' + addrCrowdsale + '/buyTokens?kld-from=' + CFG_KLD_NODE0_SIGNACC0 + '&kld-ethvalue=' + value
+    let url = URL_GWAPI_CROWDSALE + '/' + addrCrowdsale + '/buyTokens?kld-from=' + CFG_KLD_NODE0_SIGNACC0 + '&kld-ethvalue=' + value
 
     let payload = {
         "beneficiary": addrBeneficiary
@@ -112,10 +132,9 @@ async function purchaseTokens(addrCrowdsale, addrBeneficiary, value) {
 
     let result = await axios.post(url, payload).catch(err => console.log(err))
 
-    console.log(result)
-
+    return result
 }
 
 module.exports = {
-    getDeployedCrowdsales, purchaseTokens
+    getDeployedCrowdsales, deployCrowdsale, purchaseTokens
 }

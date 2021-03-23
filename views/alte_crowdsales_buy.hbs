@@ -10,7 +10,7 @@
                 <form name="frmBuyTokens" method="post" action="/crowdsales/purchase">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="selCrowdsale">Type</label>
+                            <label for="selCrowdsale">Crowdsale</label>
                             <select class="form-control select2bs4" name="selCrowdsale"style="width: 100%;">
                                 {{#each crowdsales}}
                                 <option value="{{address}}">{{name}}, {{symbol}} [{{address}}]</option>
@@ -18,7 +18,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="selInvestor">Type</label>
+                            <label for="selInvestor">Investor</label>
                             <select class="form-control select2bs4" name="selInvestor"style="width: 100%;">
                                 {{#each investors}}
                                 <option value="{{wallet}}">{{name}}, {{userId}} [{{wallet}}]</option>

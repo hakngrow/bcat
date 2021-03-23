@@ -6,14 +6,14 @@ const {
     CFG_KLD_NODE0_SIGNACC0, CFG_KLD_NODE0_URL_REST, CFG_KLD_GWAPI_ID_TOKEN
 } = require('../helpers/config')
 
-const URL_REST_CONTRACTS = 'https://' + CFG_KLD_CONSOLE_URL + '/ledger/' + CFG_KLD_CONSORTIA_ID + '/' + CFG_KLD_ENV_ID + '/tokens/contracts'
+const URL_PLAPI_TOKENS = 'https://' + CFG_KLD_CONSOLE_URL + '/ledger/' + CFG_KLD_CONSORTIA_ID + '/' + CFG_KLD_ENV_ID + '/tokens/contracts'
 
 const URL_GWAPI_TOKEN = 'https://' + CFG_KLD_BASIC_AUTH + '@' + CFG_KLD_NODE0_URL_REST + '/gateways/' + CFG_KLD_GWAPI_ID_TOKEN
 
 
 async function getDeployedTokens() {
 
-    let result = await axios.get(URL_REST_CONTRACTS, {headers: {'Authorization': 'Bearer ' + CFG_KLD_API_KEY}})
+    let result = await axios.get(URL_PLAPI_TOKENS, {headers: {'Authorization': 'Bearer ' + CFG_KLD_API_KEY}})
 
     const tokens = result.data.map(token => {
             
@@ -30,11 +30,14 @@ async function getDeployedTokens() {
 
     for (var i = 0; i < tokens.length; i++) {
 
+        let cap = await getTokenCap(tokens[i]['address'])
         let decimals = await getTokenDecimals(tokens[i]['address'])
         let isPaused = await isTokenPaused(tokens[i]['address'])
 
+        tokens[i]['cap'] = cap
         tokens[i]['decimals'] = decimals
         tokens[i]['paused'] = isPaused
+
     }
 
     return tokens
@@ -42,7 +45,7 @@ async function getDeployedTokens() {
 
 async function getDeployedToken(address) {
 
-    let url = URL_REST_CONTRACTS + '/' + address
+    let url = URL_PLAPI_TOKENS + '/' + address
 
     let result = await axios.get(url, {headers: {'Authorization': 'Bearer ' + CFG_KLD_API_KEY}})
 
@@ -52,6 +55,7 @@ async function getDeployedToken(address) {
         name: tokenName, 
         symbol: tokenSymbol, 
         totalSupply: erc20TotalSupply, 
+        cap: getTokenCap(address),
         'address': address, 
         gatewayId: gatewayAPIId,
         decimals: getTokenDecimals(address),
@@ -91,6 +95,15 @@ async function getTokenSymbol(address) {
 async function getTokenDecimals(address) {
 
     let url = URL_GWAPI_TOKEN + '/' + address + '/decimals?kld-from=' + CFG_KLD_NODE0_SIGNACC0
+
+    let result = await axios.get(url).catch(err => console.log(err))
+
+    return result.data.output
+}
+
+async function getTokenTotalSupply(address) {
+
+    let url = URL_GWAPI_TOKEN + '/' + address + '/totalSupply?kld-from=' + CFG_KLD_NODE0_SIGNACC0
 
     let result = await axios.get(url).catch(err => console.log(err))
 
@@ -200,7 +213,7 @@ async function deployToken(_name, _symbol, _decimals, _cap) {
 
 module.exports = {
     getDeployedTokens, getDeployedToken, 
-    getTokenCap, getTokenName, getTokenSymbol, getTokenDecimals, getTokenBalance, isTokenPaused,
+    getTokenCap, getTokenName, getTokenSymbol, getTokenDecimals, getTokenTotalSupply, getTokenBalance, isTokenPaused,
     addTokenPauser, renounceTokenPauser, isTokenPauser, 
     addTokenMinter, renounceTokenMinter, isTokenMinter, 
     pauseToken, unpauseToken, deployToken
